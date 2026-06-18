@@ -2,9 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HotelController;
 
 // Route yang bisa diakses tanpa login
-Route::group(['prefix' => 'auth'], function () {
+    Route::group(['prefix' => 'auth'], function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
 });
@@ -14,3 +15,5 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth:api'], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 });
+// 3. Route CRUD Hotel (Menggunakan Resource Route)
+Route::apiResource('hotels', HotelController::class);
