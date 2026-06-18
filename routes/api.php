@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HotelController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\BookingController;
 
 // Route yang bisa diakses tanpa login
     Route::group(['prefix' => 'auth'], function () {
@@ -20,3 +21,13 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth:api'], function () {
 Route::apiResource('hotels', HotelController::class);
 // Route CRUD Kamar
 Route::apiResource('rooms', RoomController::class);
+// Route yang wajib login (Harus membawa Token JWT)
+
+Route::prefix('auth')->middleware('auth:api')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/me', [AuthController::class, 'me']);
+    
+    // Tambahkan dua rute transaksi booking ini di dalam grup auth
+    Route::post('/bookings', [BookingController::class, 'store']);
+    Route::get('/my-bookings', [BookingController::class, 'myBookings']);
+});
