@@ -11,7 +11,14 @@ use Carbon\Carbon;
 
 class BookingController extends Controller
 {
-    // 1. TAMBAH BOOKING BARU (Proses Transaksi)
+    // 1. [READ ALL] - Melihat Semua Booking (Fungsi untuk Admin)
+    public function index()
+    {
+        $bookings = Booking::query()->with(['user', 'room.hotel'])->get();
+        return response()->json(['success' => true, 'data' => $bookings], 200);
+    }
+
+    // 2. [CREATE] - Membuat Pesanan Baru
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -24,15 +31,13 @@ class BookingController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        // Ditambahkan ::query() agar VS Code mengenali method find()
         $room = Room::query()->find($request->room_id); 
 
-        // Validasi Awal: Cek apakah kamar tersebut sedang dinonaktifkan
         if (!$room || !$room->is_available) {
-            return response()->json(['message' => 'Maaf, kamar ini sedang tidak tersedia untuk dipesan.'], 400);
+            return response()->json(['message' => 'Maaf, kamar ini sedang tidak tersedia.'], 400);
         }
 
-        // Ditambahkan ::query() agar VS Code mengenali rangkaian method where()
+        // Validasi Overlapping Tanggal
         $isBentrok = Booking::query()->where('room_id', $request->room_id)
             ->where('status', '!=', 'cancelled') 
             ->where(function ($query) use ($request) {
@@ -45,22 +50,17 @@ class BookingController extends Controller
             })->exists();
 
         if ($isBentrok) {
-            return response()->json(['message' => 'Maaf, kamar sudah dipesan oleh orang lain pada rentang tanggal tersebut.'], 400);
+            return response()->json(['message' => 'Maaf, kamar sudah dipesan pada rentang tanggal tersebut.'], 400);
         }
 
-        // Hitung Otomatis Total Harga Menggunakan Carbon
+        // Hitung Otomatis Total Harga
         $checkInDate  = Carbon::parse($request->check_in);
         $checkOutDate = Carbon::parse($request->check_out);
         $durasiMenginap = $checkInDate->diffInDays($checkOutDate); 
-
         $totalHarga = $durasiMenginap * $room->price_per_night;
 
-        // Ambil ID User yang sedang login via JWT Token
-        $userId = auth()->guard('api')->id(); 
-
-        // Simpan Transaksi Booking
         $booking = Booking::create([
-            'user_id'     => $userId,
+            'user_id'     => auth()->guard('api')->id(),
             'room_id'     => $request->room_id,
             'check_in'    => $request->check_in,
             'check_out'   => $request->check_out,
@@ -68,19 +68,65 @@ class BookingController extends Controller
             'status'      => 'pending'
         ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Booking berhasil dibuat! Menunggu konfirmasi pembayaran.',
-            'data'    => $booking
-        ], 201);
+        return response()->json(['success' => true, 'message' => 'Booking berhasil dibuat!', 'data' => $booking], 201);
     }
 
-    // 2. LIHAT RIWAYAT BOOKING USER YANG SEDANG LOGIN
+    // 3. [READ SINGLE] - Detail Satu Transaksi Booking
+    public function show($id)
+    {
+        $booking = Booking::query()->with(['user', 'room.hotel'])->find($id);
+
+        if (!$booking) {
+            return response()->json(['message' => 'Data booking tidak ditemukan'], 404);
+        }
+
+        return response()->json(['success' => true, 'data' => $booking], 200);
+    }
+
+    // 4. [UPDATE] - Mengubah Status Booking (Konfirmasi Pembayaran oleh Admin)
+    public function update(Request $request, $id)
+    {
+        $booking = Booking::query()->find($id);
+
+        if (!$booking) {
+            return response()->json(['message' => 'Data booking tidak ditemukan'], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|in:pending,confirmed,cancelled'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $booking->update(['status' => $request->status]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status booking berhasil diperbarui menjadi ' . $request->status,
+            'data'    => $booking
+        ], 200);
+    }
+
+    // 5. [DELETE] - Menghapus Riwayat Transaksi dari Database
+    public function destroy($id)
+    {
+        $booking = Booking::query()->find($id);
+
+        if (!$booking) {
+            return response()->json(['message' => 'Data booking tidak ditemukan'], 404);
+        }
+
+        Booking::destroy($id);
+
+        return response()->json(['success' => true, 'message' => 'Data riwayat booking berhasil dihapus'], 200);
+    }
+
+    // 6. [ADDITIONAL] - Riwayat Khusus User yang Sedang Login
     public function myBookings()
     {
         $userId = auth()->guard('api')->id();
-        
-        // Ditambahkan ::query() agar VS Code mengenali method where() dan dengan relasinya
         $bookings = Booking::query()->where('user_id', $userId)->with('room.hotel')->get();
 
         return response()->json(['success' => true, 'data' => $bookings], 200);

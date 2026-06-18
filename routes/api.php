@@ -28,6 +28,10 @@ Route::prefix('auth')->middleware('auth:api')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     
     // Tambahkan dua rute transaksi booking ini di dalam grup auth
-    Route::post('/bookings', [BookingController::class, 'store']);
-    Route::get('/my-bookings', [BookingController::class, 'myBookings']);
+    // Route::post('/bookings', [BookingController::class, 'store']);
+    // Route::get('/my-bookings', [BookingController::class, 'myBookings']);
+
+    // Di dalam Route::prefix('auth')->middleware('auth:api')->group(function () { ...
+Route::get('/my-bookings', [BookingController::class, 'myBookings']); // Taruh ini di atas resource
+Route::apiResource('bookings', BookingController::class);
 });
