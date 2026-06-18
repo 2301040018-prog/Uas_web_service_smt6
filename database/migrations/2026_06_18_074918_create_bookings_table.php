@@ -10,12 +10,18 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('bookings', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('rooms', function (Blueprint $table) {
+        $table->id();
+        // Relasi ke tabel hotels, jika hotel dihapus maka kamar otomatis terhapus (cascade)
+        $table->foreignId('hotel_id')->constrained('hotels')->onDelete('cascade');
+        $table->string('room_number');
+        $table->string('type'); // Contoh: Deluxe, Standard, Suite
+        $table->decimal('price_per_night', 10, 2);
+        $table->boolean('is_available')->default(true);
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.
