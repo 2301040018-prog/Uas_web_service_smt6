@@ -5,7 +5,8 @@
     <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo">
   </a>
 </p>
-# 🏨 API Sistem Manajemen Hotel dan Reservasi Kamar
+
+## 🏨 API Sistem Manajemen Hotel dan Reservasi Kamar
 
 RESTful API untuk pengelolaan sistem reservasi hotel mencakup manajemen data hotel, data kamar, pencarian ketersediaan kamar, transaksi booking, dan riwayat pemesanan pengguna.
 
@@ -205,7 +206,7 @@ Dokumentasi mencakup detail endpoint, method, parameter, contoh request, dan con
 | Nama                 | NIM        | Tugas                                                                                                                    |
 | -------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
 | Duwik                | 2301040018 | Arsitektur sistem, JWT Authentication, Endpoint Auth, Endpoint Booking, validasi booking dan perhitungan tarif otomatis. |
-| Baiq Alia Zulifianti | 230104xxxx | Endpoint Hotel, Endpoint Room, relasi database, Middleware Activity Log, dan pengujian API.                              |
+| Baiq Alia Zulifianti | 2301040032 | Endpoint Hotel, Endpoint Room, relasi database, Middleware Activity Log, dan pengujian API.                              |
 
 ---
 
