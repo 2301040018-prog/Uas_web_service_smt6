@@ -5,18 +5,15 @@
     <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo">
   </a>
 </p>
-
 # 🏨 API Sistem Manajemen Hotel dan Reservasi Kamar
 
-RESTful API untuk pengelolaan sistem reservasi hotel yang mencakup manajemen data hotel, data kamar, pencarian ketersediaan kamar, transaksi booking, dan riwayat pemesanan pengguna.
-
----
+RESTful API untuk pengelolaan sistem reservasi hotel mencakup manajemen data hotel, data kamar, pencarian ketersediaan kamar, transaksi booking, dan riwayat pemesanan pengguna.
 
 ## 📖 Deskripsi Singkat
 
 API Sistem Manajemen Hotel dan Reservasi Kamar adalah layanan Web Service berbasis RESTful API yang dibangun menggunakan Laravel dan JWT Authentication. Sistem ini dirancang untuk memudahkan proses operasional hotel dan pemesanan kamar secara digital dan terintegrasi.
 
-### ✨ Fitur Utama
+### Fitur Utama
 
 * 🔐 Autentikasi pengguna menggunakan JWT (Register, Login, Logout, Me)
 * 🏨 Manajemen data hotel (CRUD)
@@ -24,7 +21,7 @@ API Sistem Manajemen Hotel dan Reservasi Kamar adalah layanan Web Service berbas
 * 🔍 Pencarian dan validasi ketersediaan kamar secara real-time
 * 🛒 Transaksi booking dan pembatalan reservasi
 * 📅 Perhitungan tarif otomatis menggunakan Carbon
-* 📝 Log aktivitas otomatis menggunakan Middleware
+* 📝 Log aktivitas otomatis setiap request tercatat ke database melalui Middleware
 
 ---
 
@@ -37,11 +34,13 @@ API Sistem Manajemen Hotel dan Reservasi Kamar adalah layanan Web Service berbas
 * MySQL
 * Laravel Herd / XAMPP / Laragon
 
+### Langkah-langkah
+
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/username/Uas_Web_Service.git
-cd Uas_Web_Service
+git clone https://github.com/2301040018-prog/Uas_web_service_smt6.git
+cd uas_web_service
 ```
 
 ### 2. Install Dependency
@@ -50,7 +49,7 @@ cd Uas_Web_Service
 composer install
 ```
 
-### 3. Salin File Environment
+### 3. Salin File Konfigurasi
 
 ```bash
 cp .env.example .env
@@ -62,15 +61,15 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-### 5. Konfigurasi Database
+### 5. Konfigurasi File .env
 
-Edit file `.env`:
+Buka file `.env` dan sesuaikan bagian berikut:
 
 ```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=db_manajemen_hotel
+DB_DATABASE=web_service_uas
 DB_USERNAME=root
 DB_PASSWORD=
 ```
@@ -96,120 +95,118 @@ php artisan serve
 Server akan berjalan pada:
 
 ```text
-http://127.0.0.1:8000
+http://uas_ws_smt6.test
 ```
 
 ---
 
-## 👤 Akun Uji Coba
+## 👤 Informasi Pengujian
 
-Setelah menjalankan seeder, akun berikut tersedia untuk pengujian:
+Sistem tidak menyediakan akun bawaan untuk pengujian. Pengguna harus melakukan registrasi terlebih dahulu sebelum dapat mengakses fitur yang memerlukan autentikasi.
 
-| Role       | Email                                 | Password    |
-| ---------- | ------------------------------------- | ----------- |
-| Admin/User | [eka@gmail.com](mailto:eka@gmail.com) | password123 |
+### Registrasi Akun
 
-### Cara Login
+| Method | Endpoint           |
+| ------ | ------------------ |
+| POST   | /api/auth/register |
 
-Kirim request:
+Setelah registrasi berhasil, lakukan login menggunakan email dan password yang telah didaftarkan.
 
-```http
-POST /api/auth/login
+### Login
+
+| Method | Endpoint        |
+| ------ | --------------- |
+| POST   | /api/auth/login |
+
+Login yang berhasil akan menghasilkan JWT Token yang digunakan sebagai **Bearer Token** pada header Authorization untuk mengakses endpoint yang memerlukan autentikasi.
+
+Contoh:
+
+```text
+Authorization: Bearer <token>
 ```
 
-Gunakan email dan password di atas, kemudian simpan token JWT yang diperoleh dan gunakan sebagai Bearer Token pada endpoint yang memerlukan autentikasi.
+---
+
+## 📡 Daftar Endpoint
+
+### 🔐 Authentication
+
+| Method | Endpoint           | Keterangan                        |
+| ------ | ------------------ | --------------------------------- |
+| POST   | /api/auth/register | Registrasi user baru              |
+| POST   | /api/auth/login    | Login dan mendapatkan token JWT   |
+| POST   | /api/auth/logout   | Logout dan invalidasi token       |
+| GET    | /api/auth/me       | Ambil data user yang sedang login |
 
 ---
 
-# 📡 Daftar Endpoint API
+### 🏨 Hotels
 
-## 🔐 Authentication
-
-| Method | Endpoint           | Keterangan                  |
-| ------ | ------------------ | --------------------------- |
-| POST   | /api/auth/register | Registrasi user baru        |
-| POST   | /api/auth/login    | Login dan mendapatkan JWT   |
-| POST   | /api/auth/logout   | Logout user                 |
-| GET    | /api/auth/me       | Menampilkan data user login |
-
----
-
-## 🏨 Hotels
-
-| Method | Endpoint         | Keterangan                |
-| ------ | ---------------- | ------------------------- |
-| GET    | /api/hotels      | Menampilkan seluruh hotel |
-| POST   | /api/hotels      | Menambahkan hotel baru    |
-| GET    | /api/hotels/{id} | Detail hotel              |
-| PUT    | /api/hotels/{id} | Update data hotel         |
-| DELETE | /api/hotels/{id} | Hapus data hotel          |
+| Method | Endpoint         | Keterangan         |
+| ------ | ---------------- | ------------------ |
+| GET    | /api/hotels      | Daftar semua hotel |
+| POST   | /api/hotels      | Tambah hotel baru  |
+| GET    | /api/hotels/{id} | Detail hotel       |
+| PUT    | /api/hotels/{id} | Update data hotel  |
+| DELETE | /api/hotels/{id} | Hapus hotel        |
 
 ---
 
-## 🛏️ Rooms
+### 🛏️ Rooms
 
-| Method | Endpoint        | Keterangan                |
-| ------ | --------------- | ------------------------- |
-| GET    | /api/rooms      | Menampilkan seluruh kamar |
-| POST   | /api/rooms      | Menambahkan kamar         |
-| GET    | /api/rooms/{id} | Detail kamar              |
-| PUT    | /api/rooms/{id} | Update data kamar         |
-| DELETE | /api/rooms/{id} | Hapus data kamar          |
+| Method | Endpoint        | Keterangan         |
+| ------ | --------------- | ------------------ |
+| GET    | /api/rooms      | Daftar semua kamar |
+| POST   | /api/rooms      | Tambah kamar baru  |
+| GET    | /api/rooms/{id} | Detail kamar       |
+| PUT    | /api/rooms/{id} | Update data kamar  |
+| DELETE | /api/rooms/{id} | Hapus kamar        |
 
 ---
 
-## 📋 Bookings
+### 📋 Bookings
 
-> Endpoint berikut memerlukan Bearer Token.
-
-| Method | Endpoint                | Keterangan                  |
-| ------ | ----------------------- | --------------------------- |
-| GET    | /api/auth/bookings      | Menampilkan seluruh booking |
-| POST   | /api/auth/bookings      | Membuat booking baru        |
-| GET    | /api/auth/bookings/{id} | Detail booking              |
-| PUT    | /api/auth/bookings/{id} | Update status booking       |
-| DELETE | /api/auth/bookings/{id} | Hapus booking               |
-| GET    | /api/auth/my-bookings   | Riwayat booking user login  |
+| Method | Endpoint                | Keterangan                       |
+| ------ | ----------------------- | -------------------------------- |
+| GET    | /api/auth/bookings      | Daftar seluruh booking           |
+| POST   | /api/auth/bookings      | Membuat booking baru             |
+| GET    | /api/auth/bookings/{id} | Detail booking                   |
+| PUT    | /api/auth/bookings/{id} | Update status booking            |
+| DELETE | /api/auth/bookings/{id} | Hapus booking                    |
+| GET    | /api/auth/my-bookings   | Riwayat booking milik user login |
 
 ---
 
 ## 📄 Dokumentasi API
 
-Dokumentasi lengkap endpoint dan Postman Collection dapat diakses melalui:
+Dokumentasi lengkap endpoint tersedia secara online melalui tautan berikut:
 
 🔗 **Tambahkan Link Postman Collection di sini**
 
-Contoh:
-
-```text
-https://documenter.getpostman.com/view/xxxxxx
-```
+Dokumentasi mencakup detail endpoint, method, parameter, contoh request, dan contoh response untuk seluruh fitur sistem.
 
 ---
 
-# 🛠️ Teknologi yang Digunakan
+## 🛠️ Teknologi yang Digunakan
 
-| Teknologi | Keterangan                             |
-| --------- | -------------------------------------- |
-| Laravel   | Framework PHP untuk REST API           |
-| MySQL     | Database Management System             |
-| JWT Auth  | Autentikasi menggunakan JSON Web Token |
-| Postman   | Pengujian API                          |
-| GitHub    | Version Control dan Kolaborasi Tim     |
-
----
-
-# 👨‍💻 Tim Pengembang
-
-| Nama           | NIM        | Tugas                                                                        |
-| -------------- | ---------- | ---------------------------------------------------------------------------- |
-| Eka Putra      | 230104XXXX | Pengembangan Arsitektur Sistem, Endpoint Auth, Booking Logic, Optimasi Query |
-| Rekan Kelompok | 230104XXXX | CRUD Hotel & Kamar, Relasi Database, Middleware Log Aktivitas                |
+| Teknologi | Keterangan                                           |
+| --------- | ---------------------------------------------------- |
+| Laravel   | Framework PHP untuk membangun RESTful API            |
+| MySQL     | Database untuk menyimpan data sistem                 |
+| JWT Auth  | Autentikasi berbasis JSON Web Token (tymon/jwt-auth) |
+| Postman   | Tools untuk testing dan dokumentasi API              |
+| GitHub    | Version control dan kolaborasi tim                   |
 
 ---
 
-## 📜 Lisensi
+## 👨‍💻 Tim Pengembang
 
-Project ini dibuat untuk memenuhi tugas mata kuliah **Web Service** Program Studi Rekayasa Perangkat Lunak.
+| Nama                 | NIM        | Tugas                                                                                                                    |
+| -------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Duwik                | 2301040018 | Arsitektur sistem, JWT Authentication, Endpoint Auth, Endpoint Booking, validasi booking dan perhitungan tarif otomatis. |
+| Baiq Alia Zulifianti | 230104xxxx | Endpoint Hotel, Endpoint Room, relasi database, Middleware Activity Log, dan pengujian API.                              |
 
-© 2026 Kelompok API Sistem Manajemen Hotel dan Reservasi Kamar
+---
+
+### Proyek UAS Mata Kuliah Web Service Genap 2025/2026 | Universitas Bumigora
