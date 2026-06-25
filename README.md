@@ -1,5 +1,3 @@
-
-
 <p align="center">
   <a href="https://laravel.com" target="_blank">
     <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo">
@@ -16,13 +14,13 @@ API Sistem Manajemen Hotel dan Reservasi Kamar adalah layanan Web Service berbas
 
 ### Fitur Utama
 
-* 🔐 Autentikasi pengguna menggunakan JWT (Register, Login, Logout, Me)
-* 🏨 Manajemen data hotel (CRUD)
-* 🛏️ Manajemen data kamar (CRUD)
-* 🔍 Pencarian dan validasi ketersediaan kamar secara real-time
-* 🛒 Transaksi booking dan pembatalan reservasi
-* 📅 Perhitungan tarif otomatis menggunakan Carbon
-* 📝 Log aktivitas otomatis setiap request tercatat ke database melalui Middleware
+- 🔐 Autentikasi pengguna menggunakan JWT (Register, Login, Logout, Me)
+- 🏨 Manajemen data hotel (CRUD)
+- 🛏️ Manajemen data kamar (CRUD)
+- 🔍 Pencarian dan validasi ketersediaan kamar secara real-time
+- 🛒 Transaksi booking dan pembatalan reservasi
+- 📅 Perhitungan tarif otomatis menggunakan Carbon
+- 📝 Log aktivitas otomatis setiap request tercatat ke database melalui Middleware
 
 ---
 
@@ -30,10 +28,10 @@ API Sistem Manajemen Hotel dan Reservasi Kamar adalah layanan Web Service berbas
 
 ### Persyaratan
 
-* PHP >= 8.2
-* Composer
-* MySQL
-* Laravel Herd / XAMPP / Laragon
+- PHP >= 8.2
+- Composer
+- MySQL
+- Laravel Herd / XAMPP / Laragon
 
 ### Langkah-langkah
 
@@ -183,7 +181,7 @@ Authorization: Bearer <token>
 
 Dokumentasi lengkap endpoint tersedia secara online melalui tautan berikut:
 
-🔗 **Tambahkan Link Postman Collection di sini**
+🔗 **https://documenter.getpostman.com/view/43068591/2sBXwwonvD**
 
 Dokumentasi mencakup detail endpoint, method, parameter, contoh request, dan contoh response untuk seluruh fitur sistem.
 
